@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчет по заданию №3 - Веб-форма с сохранением в БД</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Информация о студенте */
+        .student-info {
+            background: #f8f9fa;
+            padding: 20px 40px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .student-info div {
+            font-size: 16px;
+        }
+
+        .student-info strong {
+            color: #667eea;
+        }
+
+        /* Секции */
+        .section {
+            padding: 30px 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+
+        .section-description {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* Скриншоты */
+        .screenshot {
+            margin: 30px 0;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .screenshot-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .screenshot img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .screenshot-caption {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Таблицы */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .info-table th,
+        .info-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .info-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .info-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .info-table tr:hover {
+            background: #f0f2f5;
+        }
+
+        /* Код */
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 20px 0;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Ссылки */
+        .links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .link-card {
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .link-card:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+
+        .link-card h4 {
+            margin-bottom: 5px;
+        }
+
+        .link-card p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Бейджи */
+        .badge {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .badge-blue {
+            background: #3498db;
+        }
+
+        .badge-purple {
+            background: #9b59b6;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2d2d2d;
+            color: #aaa;
+            padding: 20px 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+            .student-info {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <div class="header">
+            <h1>📋 Задание №3</h1>
+            <p>Веб-форма с валидацией и сохранением данных в MySQL</p>
+        </div>
+
+        <!-- 1. Описание задания -->
+        <div class="section">
+            <h2 class="section-title">📌 Описание задания</h2>
+            <div class="section-description">
+                <p>Разработать HTML-форму с 9 полями (ФИО, телефон, email, дата рождения, пол, любимые языки программирования, биография, чекбокс контракта).</p>
+                <p>Реализовать серверную валидацию всех полей с выводом понятных ошибок.</p>
+                <p>Сохранять данные в базу данных MySQL с использованием подготовленных запросов (Prepared Statements).</p>
+                <p>База данных должна быть в 3-й нормальной форме (3 таблицы).</p>
+            </div>
+        </div>
+
+        <!-- 2. Структура базы данных -->
+        <div class="section">
+            <h2 class="section-title">🗄️ Структура базы данных (3-я нормальная форма)</h2>
+            <div class="section-description">
+                <p>База данных состоит из 3 таблиц, что соответствует 3-й нормальной форме:</p>
+                <ul style="margin-left: 30px; margin-top: 10px;">
+                    <li><strong>applications</strong> — основная таблица с данными заявки (автоинкрементный id)</li>
+                    <li><strong>programming_languages</strong> — справочник языков программирования</li>
+                    <li><strong>application_languages</strong> — связующая таблица (один ко многим)</li>
+                </ul>
+            </div>
+            
+            <div class="screenshot">
+                <div class="screenshot-title">📸 Скриншот 6: Подключение к MySQL</div>
+                <img src="sql.png" alt="Подключение к MySQL" onerror="this.src='https://via.placeholder.com/800x200?text=подключение+к+sql.png'">
+                <div class="screenshot-caption">Рисунок 6 — Успешное подключение к MySQL</div>
+            </div>
+            <!-- Скриншот: Выбор БД -->
+            <div class="screenshot">
+                <div class="screenshot-title">📸 Скриншот 1: Выбор базы данных u82292</div>
+                <img src="usebd.png" alt="Выбор базы данных" onerror="this.src='https://via.placeholder.com/800x200?text=Выбор+бд.png'">
+                <div class="screenshot-caption">Рисунок 1 — База данных u82292 выбрана для работы</div>
+            </div>
+
+            <!-- Скриншот: Создание таблиц -->
+            <div class="screenshot">
+                <div class="screenshot-title">📸 Скриншот 2: Создание таблиц (3 таблицы в 3НФ)</div>
+                <img src="createtable.png" alt="Создание таблиц" onerror="this.src='https://via.placeholder.com/800x300?text=Создание+таблиц+в+бд.png'">
+                <div class="screenshot-caption">Рисунок 2 — Создание таблиц applications, programming_languages, application_languages</div>
+            </div>
+        </div>
+
+        <!-- 3. Создание директории и клонирование -->
+        <div class="section">
+            <h2 class="section-title">📁 Развертывание на сервере</h2>
+            
+            <div class="screenshot">
+                <div class="screenshot-title">📸 Скриншот 4: Создание директории webback-3</div>
+                <img src="createdirect.png" alt="Создание директории" onerror="this.src='https://via.placeholder.com/800x100?text=создание+директории.png'">
+                <div class="screenshot-caption">Рисунок 4 — Создание рабочей директории ~/www/webback-3</div>
+            </div>
+
+            <div class="screenshot">
+                <div class="screenshot-title">📸 Скриншот 5: Клонирование репозитория с GitHub</div>
+                <img src="gitclone.png" alt="Клонирование" onerror="this.src='https://via.placeholder.com/800x150?text=клонирование+репозитория+на+сервер.png'">
+                <div class="screenshot-caption">Рисунок 5 — Клонирование репозитория на сервер (git clone)</div>
+            </div>
+        </div>
+
+        <!-- 5. Валидация -->
+        <div class="section">
+            <h2 class="section-title">⚙️ Серверная валидация</h2>
+            <div class="section-description">
+                <p>Все поля проходят валидацию на стороне сервера (бекэнд):</p>
+            </div>
+
+            <table class="info-table">
+                <thead>
+                    <tr><th>Поле</th><th>Правила валидации</th><th>Сообщение об ошибке</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>ФИО</td><td>Только буквы, пробелы, дефисы, не длиннее 150 символов</td><td>"ФИО может содержать только буквы..."</td></tr>
+                    <tr><td>Телефон</td><td>Формат +7 (xxx) xxx-xx-xx, 10-20 символов</td><td>"Неверный формат телефона"</td></tr>
+                    <tr><td>Email</td><td>Валидный email формат</td><td>"Неверный формат e-mail"</td></tr>
+                    <tr><td>Дата рождения</td><td>Возраст от 18 до 120 лет</td><td>"Возраст должен быть от 18 до 120 лет"</td></tr>
+                    <tr><td>Пол</td><td>male или female</td><td>"Укажите пол"</td></tr>
+                    <tr><td>Языки</td><td>Хотя бы 1 из 12 допустимых</td><td>"Выберите хотя бы один язык"</td></tr>
+                    <tr><td>Контракт</td><td>Должен быть отмечен</td><td>"Необходимо подтвердить ознакомление"</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 6. Успешное сохранение -->
+        <div class="section">
+            <h2 class="section-title">💾 Сохранение в базу данных</h2>
+            <div class="section-description">
+                <p>Используются подготовленные запросы (PDO Prepared Statements). Данные сохраняются в 3 таблицы с использованием транзакций.</p>
+            </div>
+
+            <div class="code-block">
+                <pre>// Пример подготовленного запроса
+$stmt = $db->prepare("INSERT INTO applications (full_name, phone, email, birth_date, gender, biography, contract_agreed) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt->execute([$fio, $phone, $email, $birth_date, $gender, $biography, (int)$contract]);
+
+// Сохранение выбранных языков в связующую таблицу
+foreach ($languages as $lang_name) {
+    $lang_stmt = $db->prepare("SELECT id FROM programming_languages WHERE name = ?");
+    $lang_stmt->execute([$lang_name]);
+    $lang = $lang_stmt->fetch();
+    $insert_lang->execute([$app_id, $lang['id']]);
+}</pre>
+            </div>
+        </div>
+
+        <!-- 7. Ссылки на ресурсы -->
+        <div class="section">
+            <h2 class="section-title">🔗 Ссылки</h2>
+            <div class="links">
+                <a href="http://u82292.kubsu-dev.ru/webback-3/" class="link-card" target="_blank">
+                    <h4>🌐 Рабочая форма</h4>
+                    <p>http://u82292.kubsu-dev.ru/webback-3/</p>
+                </a>
+                <a href="https://github.com/user-afk-qw/webback-3" class="link-card" target="_blank">
+                    <h4>📦 GitHub репозиторий</h4>
+                    <p>github.com/user-afk-qw/webback-3</p>
+                </a>
+                <a href="https://github.com/user-afk-qw/webback-3/blob/main/index.php" class="link-card" target="_blank">
+                    <h4>🐘 Исходный код (PHP)</h4>
+                    <p>index.php с валидацией</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
